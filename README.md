@@ -2,7 +2,7 @@
 
 A full-stack Mini Helpdesk System that lets users raise support tickets and lets administrators triage, respond to, and resolve them — built with an event-driven backend, role-based access control, and a clean React dashboard for both audiences.
 
-**Live Demo:** _[coming soon](#live-demo)_ · **Tech Stack:** Node.js · Express · TypeScript · MongoDB · React · Docker
+**Live Demo:** [helpdesk-client-zfc1.onrender.com](https://helpdesk-client-zfc1.onrender.com) · **Tech Stack:** Node.js · Express · TypeScript · MongoDB · React · Docker
 
 ---
 
@@ -69,14 +69,14 @@ A full-stack Mini Helpdesk System that lets users raise support tickets and lets
 
 ## Live Demo
 
-> _To be filled in after deployment — see [Deployment](#deployment) below for the hosting plan._
-
 | | URL |
 |---|---|
-| Frontend | `TBD` |
-| Backend API | `TBD/api/health` |
+| Frontend | [helpdesk-client-zfc1.onrender.com](https://helpdesk-client-zfc1.onrender.com) |
+| Backend API health check | [helpdesk-server-r8jk.onrender.com/api/health](https://helpdesk-server-r8jk.onrender.com/api/health) |
 
-**Try it with a demo account**, or register your own — new accounts always start as a regular `user`. To explore admin features, use the credentials provided in the demo link once published.
+**Register your own account to try it** — new accounts always start as a regular `user`, by design (see [Security](#security)). Admin accounts aren't self-serve; they're provisioned separately via the `create-admin` script described in [Setup Instructions](#creating-an-admin-account).
+
+> **Note:** this is hosted on Render's free tier, which spins down after 15 minutes of inactivity. If the link feels slow on first load (~30–50 seconds), that's the instance waking up — not a bug. Refresh after it loads once and it'll be fast from then on.
 
 ---
 
