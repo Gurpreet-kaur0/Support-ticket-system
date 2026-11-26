@@ -319,23 +319,22 @@ A Postman collection can be generated from this table, or import the endpoints a
 
 ## Deployment
 
-The app is ready to deploy as two independently hosted pieces — backend API and frontend — communicating over HTTPS rather than relying on same-origin proxying. A `render.yaml` blueprint is included for the backend.
+The simplest path needs only **two free accounts** — MongoDB Atlas (database) and Render (both backend and frontend, via one Blueprint). No credit card required for either.
 
-### 1. Database — MongoDB Atlas (free tier)
-1. Create a free account at MongoDB Atlas and spin up an M0 (free) cluster.
-2. Create a database user and allow network access from anywhere (`0.0.0.0/0`) for simplicity, or Render's IP ranges if you want it tighter.
-3. Copy the connection string (`mongodb+srv://...`).
+### 1. Database — MongoDB Atlas (~5 min)
+1. Create a free account at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas) and spin up a free **M0** cluster.
+2. Under **Database Access**, create a database user (username + password).
+3. Under **Network Access**, add `0.0.0.0/0` (allow access from anywhere — simplest for a demo).
+4. Click **Connect → Drivers**, copy the connection string (looks like `mongodb+srv://<user>:<password>@.../`). Keep this handy for the next step.
 
-### 2. Backend — Render
-1. Push this repo to GitHub.
-2. In Render, choose **New → Blueprint**, point it at the repo — it will pick up `render.yaml` and create the `helpdesk-server` web service automatically (`JWT_SECRET` is auto-generated).
-3. Set the `MONGODB_URI` environment variable on that service to your Atlas connection string from step 1.
-4. Once deployed, confirm `https://<your-service>.onrender.com/api/health` returns `{"status":"ok"}`.
+### 2. Backend + Frontend — Render, one Blueprint (~5 min)
+1. Push this repo to GitHub (if not already there).
+2. Go to [render.com](https://render.com) → **New → Blueprint**, connect your GitHub account, and select this repo.
+3. Render reads `render.yaml` and proposes **two services**: `helpdesk-server` (the API) and `helpdesk-client` (the React app) — click **Apply**.
+4. Once `helpdesk-server` is created, open it → **Environment** → set `MONGODB_URI` to the connection string from step 1 → save (it will redeploy automatically).
+5. Check the actual URL Render assigned to `helpdesk-server` (shown at the top of its dashboard page, e.g. `https://helpdesk-server-xxxx.onrender.com`). If it doesn't exactly match `https://helpdesk-server.onrender.com` (another Render user may already own that exact name), open `helpdesk-client` → **Environment** → update `VITE_API_URL` to `<that-real-URL>/api` → save and it will rebuild.
+6. Visit `<backend-URL>/api/health` — should return `{"status":"ok"}`. Then open the `helpdesk-client` URL — that's your live app.
 
-### 3. Frontend — Vercel or Netlify
-1. Import the repo, set the project root to `client/`.
-2. Build command: `npm run build`, output directory: `dist` (both platforms detect this automatically for Vite).
-3. Set an environment variable `VITE_API_URL` to `https://<your-backend-domain>/api` — this is read at build time (see `client/src/services/api.ts` and `.env.example`).
-4. Deploy. The frontend will now call the Render backend directly instead of relying on the Docker/nginx proxy used in local development.
+**One thing to know:** Render's free tier spins services down after 15 minutes of inactivity. The first request after idling takes ~30–50 seconds to wake up — normal, not a bug. If a recruiter is about to click the link, it's worth opening it yourself a minute beforehand.
 
-Once both are live, update the [Live Demo](#live-demo) table above with the real URLs.
+Once live, update the [Live Demo](#live-demo) table above with the real URLs.
